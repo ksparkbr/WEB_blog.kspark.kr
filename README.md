@@ -1,2 +1,2 @@
-# blog.kspark.kr_Next.js
-blog.kspark.kr wite Next.js Since 2022.12.16
+# WEB_blog.kspark.kr
+blog.kspark.kr with Next.js Since 2022.12.16
