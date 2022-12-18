@@ -14,7 +14,7 @@ module.exports = async (param) => {
         param = safeParam(param);
         let query = `
            select 
-                POST_ID, TITLE, SUMMARY, CONTENT, HASH_TAGS, WRITE_MODE, SHOW_MAIN, POST_DATE
+                POST_ID, TITLE, THUMBNAIL, SUMMARY, CONTENT, HASH_TAGS, WRITE_MODE, SHOW_MAIN, POST_DATE
             from blogpost
             where 1=1
               and POST_ID= ${param.POST_ID}

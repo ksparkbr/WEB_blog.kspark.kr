@@ -10,7 +10,7 @@ const Wrapper = styled.div`
     padding: 1rem;
     box-shadow: 5px 5px 6px 0px rgba(0,0,0,30%);
     margin-bottom: 1rem;
-    border-radius: 1rem;
+    border-radius: 0 0 1rem 1rem;
     & hr{
         margin-top: 1rem;
         border: 1px solid #eeeeee;
@@ -32,7 +32,7 @@ const Flex = styled.div`
 `
 const PostDate = styled.div`
     font-size: 1rem;
-    color: grey;
+    color: #a0a0a0;
 `
 const Tag = styled.div`
     background-color: grey;
@@ -122,36 +122,59 @@ const LockImg = styled.img`
     height: 2rem;
 `
 
-export default function PostView({post}){
+const TitleWrapper = styled.div`
+    box-shadow: 5px 5px 6px 0px rgba(0,0,0,30%);
+    border-radius: 1rem 1rem 0 0;
+    color: white;
+    margin: 0 auto;
+    max-width: 1200px;
+    height: 200px;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    //align-items: center;
+    background: linear-gradient(0deg, rgb(0 0 0 / 60%), rgb(0 0 0 / 60%)), url("${(props) => props.src || "/image/avatar.png"}");
+    background-position: center;
+    background-size: cover;
+`
+
+export default function PostView({ post }) {
     const dateformat = Intl.DateTimeFormat('ko-KR', { dateStyle: 'medium', timeStyle: "short" })
-    return <Wrapper>
-        { post.admin && <EditPanel />}
-        <Title>
-            {
-                post.WRITE_MODE == "private" && <LockImg src="/image/lock.png" />
-            }
-            <div>
-                {post.TITLE}
-            </div>
-        </Title>
-        <Flex>
-            <PostDate>{dateformat.format(new Date(post.POST_DATE))}</PostDate>
-        </Flex>
-        <Flex>
-            <Tag>
-                <TagImg src="/image/tag.png" />
-                <span>Tag</span>
-            </Tag>
+    return (<>
+        
+        <TitleWrapper src={post.THUMBNAIL}>
+            <Title>
+                {
+                    post.WRITE_MODE == "private" && <LockImg src="/image/lock.png" />
+                }
+                <div>
+                    {post.TITLE}
+                </div>
+            </Title>
             <Flex>
-                {JSON.parse(post.HASH_TAGS).length > 0 && JSON.parse(post.HASH_TAGS).map((item,idx)=>{
-                    return (<HashTag key={idx}>
-                        {item}
-                    </HashTag>)
-                })}
+                <PostDate>{dateformat.format(new Date(post.POST_DATE))}</PostDate>
             </Flex>
-        </Flex>
-        <hr />
-        <ContentArea dangerouslySetInnerHTML={{__html : post.CONTENT}} />
-        <BlogLikePanel postId={post.POST_ID }/>
-    </Wrapper>
+        </TitleWrapper>
+       
+        <Wrapper>
+            {post.admin && <EditPanel />}
+            <Flex>
+                <Tag>
+                    <TagImg src="/image/tag.png" />
+                    <span>Tag</span>
+                </Tag>
+                <Flex>
+                    {JSON.parse(post.HASH_TAGS).length > 0 && JSON.parse(post.HASH_TAGS).map((item, idx) => {
+                        return (<HashTag key={idx}>
+                            {item}
+                        </HashTag>)
+                    })}
+                </Flex>
+            </Flex>
+            <hr />
+            <ContentArea dangerouslySetInnerHTML={{ __html: post.CONTENT }} />
+            <BlogLikePanel postId={post.POST_ID} />
+        </Wrapper>
+    </>)
 }
