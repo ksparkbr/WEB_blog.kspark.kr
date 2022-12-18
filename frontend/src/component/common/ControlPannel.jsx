@@ -13,7 +13,7 @@ const Wrapper = styled.div`
     width: 100%;
     font-weight: bold;
     height: 60px;
-    background: linear-gradient(0deg, transparent, rgb(214, 219, 220),rgb(214, 219, 220));
+    background: linear-gradient(0deg, transparent,rgb(214, 219, 220));
     z-index: 900;
     position: sticky;
     top: 0px;
