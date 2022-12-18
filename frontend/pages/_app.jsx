@@ -3,7 +3,7 @@ import '../public/font/font.css'
 import { useRouter } from 'next/router';
 import { reduxStore } from '../src/redux/redux-store';
 import { Transition, TransitionGroup } from 'react-transition-group';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import Top from '../src/component/common/Top';
 import Footer from '../src/component/common/Footer';
 import ControlPannel from '../src/component/common/ControlPannel';
@@ -30,6 +30,7 @@ const Wrapper = styled.div`
 `
 export default function App({ Component, pageProps }) {
   const router = useRouter();
+
   return <>
     <Provider store={reduxStore}>
       <Top />

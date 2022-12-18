@@ -1,5 +1,10 @@
-import { useEffect, useRef } from "react"
+import axios from "axios"
+import { useRouter } from "next/router"
+import { useEffect, useRef, useState } from "react"
+import { useDispatch } from "react-redux"
 import styled from "styled-components"
+import { reduxAction } from "../../redux/redux-action"
+import Alert from "./Alert"
 
 const Wrapper = styled.div`
     //width: 310px;
@@ -25,23 +30,62 @@ const Title = styled.div`
     font-size: 1.2rem;
 `
 
-export default function SignInForm() {
+export default function SignInForm({setState}) {
     const emailRef = useRef();
+    const [loginInfo, setLoginInfo] = useState({id : '', password : ''});
+    const API_URL = process.env.NEXT_PUBLIC_BACKEND;
+    const router = useRouter()
+    const dispatch = useDispatch();
+
     useEffect(() => {
         emailRef.current.focus();
     }, [])
+
+    const loginHndlr = async ()=>{
+        if(loginInfo.id !== '' && loginInfo.password !== ''){
+            let result = await axios.post(API_URL + "/session/signin", loginInfo, {withCredentials: true}).then(res => res.data);
+            if(result !== "Access Denied"){
+                window.sessionStorage.setItem("session", result);
+                dispatch(reduxAction.SESSION({session : result, admin : true}));
+                dispatch(reduxAction.ALERT({show: true, type: "info", msg : "로그인에 성공하였습니다. (관리자용)"}))
+                router.push("/post/list");
+                setState(false);
+            }
+            else{
+                dispatch(reduxAction.ALERT({show: true, type: "error", msg : "로그인에 실패 하였습니다."}))
+            }
+        }
+    }
     return <>
         <Wrapper onClick={(e) => { e.stopPropagation() }}>
             <Title>
                 Sign-In
             </Title>
             <FormControl>
-                <input type="text" placeholder="E-mail Account" ref={emailRef} />
+                <input type="text" placeholder="E-mail Account" ref={emailRef} 
+                    onChange={(e)=>{
+                        setLoginInfo({
+                            ...loginInfo,
+                            id : e.target.value,
+                        })
+                    }}
+                />
             </FormControl>
             <FormControl>
-                <input type="password" placeholder="Password" />
+                <input type="password" placeholder="Password" 
+                    onChange={(e)=>{
+                        setLoginInfo({
+                            ...loginInfo,
+                            password : e.target.value,
+                        })
+                    }}
+                    onKeyDown={(e)=>{
+                        if(e.key == "Enter"){
+                            loginHndlr();
+                        }
+                    }}
+                />
             </FormControl>
-
         </Wrapper>
     </>
 }

@@ -16,5 +16,11 @@ export const reduxAction = {
             type : 'SCREEN_SIZE',
             data : data,
         }
+    },
+    ALERT : (data) => {
+        return {
+            type : 'ALERT',
+            data : data,
+        }
     }
 }

@@ -1,5 +1,7 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components"
+import { reduxAction } from "../../redux/redux-action";
 
 const Wrapper = styled.div`
     position: fixed;
@@ -10,7 +12,7 @@ const Wrapper = styled.div`
     align-items: center;
     display: flex;
     justify-content: center;
-    background-color: ${props => props.type == 'error' ? '#fab0b0' : '#d2f2ff'};
+    background-color: ${props => props.type == 'error' ? '#ffd7d7dd' : '#d2f2ffdd'};
     border-top: 2px solid ${props => props.type == 'error' ? '#fd3737' : '#1381ae'};
     border-bottom: 2px solid ${props => props.type == 'error' ? '#fd3737' : '#1381ae'};
     color: ${props => props.type == 'error' ? '#fd3737' : '#1381ae'};
@@ -28,23 +30,27 @@ const AlertImg = styled.img`
     height: 1.2rem;
 `
 
-export default function Alert({ type, children, setState }) {
+export default function Alert({ type, children }) {
+    const alert = useSelector(s => s.alert);
+    const dispatch = useDispatch();
 
     const wrapperRef = useRef()
+    const ALERT_TIME = 3;
+    const [timer, setTimer] = useState(ALERT_TIME);
 
     const showAction = () => {
         if (wrapperRef) {
-            setTimeout(() => { try {wrapperRef.current.style.width = "500px"}catch(e){} }, 1);
-            setTimeout(() => { try {wrapperRef.current.style.height = "3rem"}catch(e){} }, 200);
+            setTimeout(() => { try { wrapperRef.current.style.width = "500px" } catch (e) { } }, 1);
+            setTimeout(() => { try { wrapperRef.current.style.height = "3rem" } catch (e) { } }, 200);
         }
     }
 
     const hideAction = () => {
         if (wrapperRef) {
             try {
-                setTimeout(() => { try {wrapperRef.current.style.height = "0px"}catch(e){} }, 1);
-                setTimeout(() => { try {wrapperRef.current.style.width = "0px"}catch(e){} }, 200);
-                setTimeout(() => setState(false), 401);
+                setTimeout(() => { try { wrapperRef.current.style.height = "0px" } catch (e) { } }, 1);
+                setTimeout(() => { try { wrapperRef.current.style.width = "0px" } catch (e) { } }, 200);
+                setTimeout(() => dispatch(reduxAction.ALERT({ ...alert, show: false})), 401);
             }
             catch (e) { }
         }
@@ -52,10 +58,14 @@ export default function Alert({ type, children, setState }) {
 
     useEffect(() => {
         showAction();
-        if(wrapperRef){
-            setTimeout(() => { hideAction() }, 5000);
-        }
     }, [])
+
+    useEffect(() => {
+        setTimeout(() => setTimer(timer - 1), 1000);
+        if (timer <= 0) {
+            hideAction();
+        }
+    }, [timer])
 
     return <>
         <Wrapper type={type} ref={wrapperRef} onClick={(e) => {

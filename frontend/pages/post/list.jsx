@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
+import { useSelector } from "react-redux";
 import styled from "styled-components"
 import LoadingSpinner from "../../src/component/common/LoadingSpinner";
 import PostCard from "../../src/component/post/Post-card";
@@ -20,18 +21,21 @@ const PostListGrid = styled.div`
 export default function PostList() {
     const [loading, setLoading] = useState(true);
     const [postList, setPostList] = useState([]);
-
-    const apiurl = process.env.NEXT_PUBLIC_BACKEND;
+    const session = useSelector(s => s.session);
+    const API_URL = process.env.NEXT_PUBLIC_BACKEND;
 
     const getPostList = async () => {
-        const url = apiurl + "/post/list";
-        let data = await axios.post(url, {}, { withCredentials: true }).then(res => res.data)
+        const url = API_URL + "/post/list";
+        let param ={
+            session : session.session,
+        }
+        let data = await axios.post(url, param, { withCredentials: true }).then(res => res.data)
         setPostList(data);
         setLoading(false);
     }
     useEffect(() => {
         getPostList();
-    }, [])
+    }, [session])
 
     useEffect(() => {
         console.log(postList);

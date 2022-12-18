@@ -1,4 +1,6 @@
 import styled from "styled-components"
+import { useRouter} from "next/router";
+import { useSelector } from "react-redux";
 
 const Wrapper = styled.div`
     position: relative;
@@ -74,12 +76,23 @@ const HashTags = styled.div`
     text-align: center;
 `
 
+const LockImg = styled.img`
+    position: absolute;
+    width: 1.2rem;
+    right: 10px;
+    top: 10px;
+`
+
 export default function PostCard({ item }) {
-    const dateformat = Intl.DateTimeFormat('en', { dateStyle: 'medium', timeStyle: "short" })
+    const dateformat = Intl.DateTimeFormat('ko-KR', { dateStyle: 'medium', timeStyle: "short" })
+    const router = useRouter();
+    const session = useSelector(s => s.session);
     return <>
         {
             item && (
-                <Wrapper>
+                <Wrapper onClick={()=>{
+                    router.push(`/post/view/${item.POST_ID}${session.session ? `?session=${session.session}` : ''}`)
+                }}>
                     <Thumbnail src={item.THUMBNAIL} />
                     <PostInfo>
                         <Flex>
@@ -100,6 +113,10 @@ export default function PostCard({ item }) {
                             {JSON.parse(item.HASH_TAGS).join(" ")}
                         </HashTags>
                     </PostInfo>
+                    {item.WRITE_MODE == "private" && (
+                        <LockImg src="/image/lock.png" />
+
+                    )}
                 </Wrapper>
             )
         }

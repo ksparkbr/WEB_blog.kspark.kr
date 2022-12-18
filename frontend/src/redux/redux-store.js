@@ -4,6 +4,11 @@ const initState = {
     session : {admin: false, session: null},
     hashtag_menu : [],
     screen_size : {width : 0, height: 0},
+    alert : {
+        show : false,
+        msg : '',
+        type : '',
+    }
 }
 
 const reducer = (state = initState, action)=>{
@@ -22,6 +27,11 @@ const reducer = (state = initState, action)=>{
             return {
                 ...state,
                 screen_size : action.data
+            }
+        case 'ALERT' : 
+            return {
+                ...state,
+                alert : action.data
             }
         default:
             return state;

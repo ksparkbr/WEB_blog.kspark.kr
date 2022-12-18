@@ -10,7 +10,9 @@ module.exports = (param) => {
     }
     if(typeof(param) == 'object'){
         Object.keys(param).forEach(item => {
-            _param[item] = replaceEscapeString(param[item])
+            if(param[item] != null){
+                _param[item] = replaceEscapeString(param[item])
+            }
         })
         return _param;
     }

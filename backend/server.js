@@ -7,6 +7,7 @@ const globalConfig = require('./src/config/global-config')
 const sessionConfig = require('./src/config/session-config')
 const logger = require('./src/config/winston-config');
 const postRouter = require('./src/router/post');
+const sessionRouter = require('./src/router/session');
 
 app.use(bodyParser.json({limit : "50mb"}));
 app.use(bodyParser.urlencoded({extended: true, limit : "50mb"}));
@@ -15,6 +16,7 @@ app.use(cors(globalConfig.corsOptions));
 app.use(morgan("combined"));
 
 app.use("/post", postRouter);
+app.use("/session", sessionRouter);
 
 app.listen(globalConfig.port, ()=>{
     logger.info(`BLOG.KSPARK.KR Backend is Opened :: Port ${globalConfig.port}`);

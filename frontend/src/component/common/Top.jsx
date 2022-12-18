@@ -1,4 +1,10 @@
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { reduxAction } from "../../redux/redux-action";
+import Alert from "./Alert";
 
 const TopWrapper = styled.div`
     position: relative;
@@ -29,14 +35,48 @@ const TopLogo = styled.div`
         color: #c2c6ff;
     }
 `
-export default function Top(){
+export default function Top() {
+    const alert = useSelector(s => s.alert);
+    const API_URL = process.env.NEXT_PUBLIC_BACKEND;
+    const dispatch = useDispatch();
+
+    const session = useSelector(s => s.session);
+
+    const checkSession = async () => {
+        let session = window.sessionStorage.getItem("session");
+        if(session){
+            let checkSession = await axios.post(API_URL + "/session/check", {session : session}, {withCredentials : true}).then(res => res.data);
+            if(checkSession){
+                dispatch(reduxAction.SESSION({admin : checkSession, session : session}));
+            }
+        }
+        else{
+            dispatch(reduxAction.SESSION({admin : false, session : null}));
+        }
+    }
+
+    useEffect(()=>{
+        checkSession();
+    },[])
+
+    useEffect(()=>{console.log(session)},[session])
+
+    const router = useRouter();
+
     return <>
         <TopWrapper>
             <TopContent>
-                <TopLogo>
+                <TopLogo onClick={()=>{
+                    router.push("/post/list");
+                }}>
                     BLOG.KSPARK.KR
                 </TopLogo>
             </TopContent>
         </TopWrapper>
+        {
+            alert.show && <Alert type={alert.type}>
+                {alert.msg}
+            </Alert>
+        }
     </>
 }
