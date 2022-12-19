@@ -158,7 +158,7 @@ export default function PostView({ post }) {
         </TitleWrapper>
        
         <Wrapper>
-            {post.admin && <EditPanel />}
+            {post.admin && <EditPanel id={post.POST_ID}/>}
             <Flex>
                 <Tag>
                     <TagImg src="/image/tag.png" />

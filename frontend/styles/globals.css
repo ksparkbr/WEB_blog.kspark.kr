@@ -77,3 +77,8 @@ a.hashtag{
 a.hashtag:hover{
   color:#9bd5ff;
 }
+
+.ql-container{
+  min-height: 40rem;
+  
+}

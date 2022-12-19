@@ -70,7 +70,9 @@ export default function ControlPannel() {
                 }}>Sign-Out</Btn>
             }
             {session.admin && 
-                <Btn>Write Post</Btn>
+                <Btn onClick={()=>{
+                    router.push("/post/editor/new")
+                }}>Write Post</Btn>
             }
         </ControlDiv>
     </Wrapper>

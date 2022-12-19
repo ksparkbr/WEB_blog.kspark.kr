@@ -1,3 +1,4 @@
+import { useRouter } from "next/router"
 import styled from "styled-components"
 
 const Wrapper = styled.div`
@@ -21,10 +22,15 @@ const ControlImg = styled.img`
     }
 `
 
-export default function EditPanel(){
+export default function EditPanel({id}){
+    const router = useRouter();
     return <Wrapper>
         <Flex>
-            <ControlImg src="/image/edit.png" />
+            <ControlImg src="/image/edit.png" 
+                onClick={()=>{
+                    router.push("/post/editor/" + id);
+                }}  
+            />
             <ControlImg src="/image/delete.png" />
         </Flex>
 
