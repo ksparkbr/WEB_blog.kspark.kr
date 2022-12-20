@@ -5,8 +5,9 @@ import { useSelector } from "react-redux";
 import dynamic from 'next/dynamic'
 import LoadingSpinner from "../../../src/component/common/LoadingSpinner";
 import 'react-quill/dist/quill.bubble.css'
+import Head from "next/head";
 
-const PostEditor = dynamic(() => import('../../../src/component/post/PostEditor'),{
+const PostEditor = dynamic(() => import('../../../src/component/post/PostEditor'), {
     ssr: false,
     loading: () => <LoadingSpinner />
 });
@@ -32,11 +33,16 @@ export default function _PostWrite() {
         else {
             setMode("new");
         };
-    }, [id])    
+    }, [id])
 
     return <>
+        <Head>
+            <title>
+                {mode != "new" ? "글 수정 | BLOG.KSPARK.KR" : "글 작성 | BLOG.KSPARK.KR"}
+            </title>
+        </Head>
         {mode != "new" ? post &&
-            <PostEditor mode="edit" post={post}/>
+            <PostEditor mode="edit" post={post} />
             :
             <PostEditor mode="new" />
         }

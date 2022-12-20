@@ -1,3 +1,4 @@
+import Head from "next/head"
 import styled from "styled-components"
 import BlogLikePanel from "./BlogLikePanel"
 import EditPanel from "./EditPanel"
@@ -142,7 +143,9 @@ const TitleWrapper = styled.div`
 export default function PostView({ post }) {
     const dateformat = Intl.DateTimeFormat('ko-KR', { dateStyle: 'medium', timeStyle: "short" })
     return (<>
-        
+        <Head>
+            <title>{post.TITLE} | BLOG.KSPARK.KR</title>
+        </Head>
         <TitleWrapper src={post.THUMBNAIL}>
             <Title>
                 {

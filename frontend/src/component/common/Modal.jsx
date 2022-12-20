@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useEffect, useRef } from "react";
 import styled from "styled-components"
 
@@ -17,29 +18,34 @@ const Wrapper = styled.div`
     backdrop-filter: blur(3px);
 `
 
-export default function Modal({children, setState}){
+export default function Modal({ children, setState }) {
     const modalRef = useRef();
 
-    const showAction = ()=>{
-        setTimeout(()=>{modalRef.current.style.opacity = 1}, 1);
+    const showAction = () => {
+        setTimeout(() => { modalRef.current.style.opacity = 1 }, 1);
     }
-    const hideAction = ()=>{
-        setTimeout(()=>{modalRef.current.style.opacity = 0}, 1);
-        setTimeout(()=>{
+    const hideAction = () => {
+        setTimeout(() => { modalRef.current.style.opacity = 0 }, 1);
+        setTimeout(() => {
             setState(false);
         }, 300);
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         showAction();
-    },[])
+    }, [])
 
-    return <Wrapper onClick={(e)=>{
-        e.stopPropagation();
-        hideAction();
-    }}
-        ref={modalRef}
-    >
-        {children}
-    </Wrapper>
+    return <>
+        <Head>
+            <title>로그인 | BLOG.KSPARK.KR</title>
+        </Head>
+        <Wrapper onClick={(e) => {
+            e.stopPropagation();
+            hideAction();
+        }}
+            ref={modalRef}
+        >
+            {children}
+        </Wrapper>
+    </>
 }

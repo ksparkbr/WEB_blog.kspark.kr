@@ -1,4 +1,5 @@
 import axios from "axios";
+import Head from "next/head";
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux";
 import styled from "styled-components"
@@ -26,8 +27,8 @@ export default function PostList() {
 
     const getPostList = async () => {
         const url = API_URL + "/post/list";
-        let param ={
-            session : session.session,
+        let param = {
+            session: session.session,
         }
         let data = await axios.post(url, param, { withCredentials: true }).then(res => res.data)
         setPostList(data);
@@ -36,19 +37,22 @@ export default function PostList() {
     useEffect(() => {
         getPostList();
     }, [session])
-    
+
     return <>
+        <Head>
+            <title>홈 | BLOG.KSPARK.KR</title>
+        </Head>
         {
             loading ? <LoadingSpinner /> : (
                 <Wrapper>
                     <PostListGrid>
-                    {
-                        postList.length > 0 && postList.map((item, idx)=>{
-                            return (
-                                <PostCard key={idx} item={item} />
-                            )
-                        })
-                    }
+                        {
+                            postList.length > 0 && postList.map((item, idx) => {
+                                return (
+                                    <PostCard key={idx} item={item} />
+                                )
+                            })
+                        }
                     </PostListGrid>
                 </Wrapper>
             )
