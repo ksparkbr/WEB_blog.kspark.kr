@@ -59,8 +59,6 @@ export default function Top() {
         checkSession();
     },[])
 
-    useEffect(()=>{console.log(session)},[session])
-
     const router = useRouter();
 
     return <>
