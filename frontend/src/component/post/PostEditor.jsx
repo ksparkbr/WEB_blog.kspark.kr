@@ -152,7 +152,7 @@ export default function PostEditor({ mode, post }) {
         tmpdom.innerHTML = _htmlContent;
         thumbnail = tmpdom.querySelector("img").src;
 
-        let hashTags = [...new Set(tmpdom.innerHTML.match(/#[^\s\<#\?]+/gi))]
+        let hashTags = [...new Set(tmpdom.innerHTML.match(/#[^\s\<#\?\&]+/gi))]
         let param = {
             //title, content, summary, thumbnail, hashtags, showmain, writemode, session_id
             title: titleContent == undefined ? "제목 없음" : titleContent,
