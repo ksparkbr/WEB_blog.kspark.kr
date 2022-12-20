@@ -126,21 +126,32 @@ export default function PostEditor({ mode, post }) {
         let tmpdom = document.createElement("div");
         tmpdom.innerHTML = htmlContent;
         let summary = tmpdom.innerText.trim().substring(0, 51);
+
+        // 작성한 글 내의 모든 img 태그를 추출하여 imageList라는 배열로 만든다.
         let imageList = [...new Set(tmpdom.querySelectorAll('img'))].map(item => item.src)
         let _htmlContent = htmlContent;
+
+        //이미지가 포함되어있지 않은경우 기본 썸네일은 아바타 이미지다.
         let thumbnail = '/image/avatar.png';
+
         if(imageList.length > 0){
+            // 추출한 이미지의 Base64 데이터를 서버로 보내서 모두 업로드 처리한다.
             let imagePath = await axios.post(FILE_SERVER_URL + "/file/image/upload", { images: imageList }).then(res => res.data)
             if (imagePath.length > 0) {
                 imagePath.forEach((item, idx) => {
                     if(item != null){
-                        if(idx == 0) thumbnail = FILE_SERVER_URL + "/file/image/view/" + item;
+                        // 업로드한 Image의 URL을 응답받으면 기존 Base64 데이터를 replace 한다.
                         let imageUrl = FILE_SERVER_URL + "/file/image/view/" + item;
                         _htmlContent = _htmlContent.replace(imageList[idx], imageUrl)
                     }
                 })
             }
         }
+
+        //썸네일 추출 - 작성한 글의 제일 첫번째 포함된 img 태그의 src를 참조한다.
+        tmpdom.innerHTML = _htmlContent;
+        thumbnail = tmpdom.querySelector("img").src;
+
         let hashTags = [...new Set(tmpdom.innerHTML.match(/#[^\s\<#\?]+/gi))]
         let param = {
             //title, content, summary, thumbnail, hashtags, showmain, writemode, session_id
@@ -153,7 +164,7 @@ export default function PostEditor({ mode, post }) {
             writemode : writemode ? "private" : "public",
             session : session.session
         }
-        // console.log(param);
+        
         if(session.admin){
             if(mode == "new"){
                 let writeResult = await axios.post(API_URL + "/post/write", param, {withCredentials: true})

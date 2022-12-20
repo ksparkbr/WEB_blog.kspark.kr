@@ -36,11 +36,7 @@ export default function PostList() {
     useEffect(() => {
         getPostList();
     }, [session])
-
-    useEffect(() => {
-        console.log(postList);
-    }, [postList])
-
+    
     return <>
         {
             loading ? <LoadingSpinner /> : (

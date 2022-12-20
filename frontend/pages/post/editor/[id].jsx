@@ -32,11 +32,7 @@ export default function _PostWrite() {
         else {
             setMode("new");
         };
-    }, [id])
-
-    useEffect(() => {
-        if (post) console.log(post);
-    }, [post])
+    }, [id])    
 
     return <>
         {mode != "new" ? post &&
