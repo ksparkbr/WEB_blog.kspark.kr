@@ -13,7 +13,7 @@ export async function getServerSideProps(context) {
             const manufacturePostContent = (content) => {
                 if (content != null) {
                     try {
-                        [...content.match(/#[^\s\<#\?]+/gi)].sort((a, b) => b.length - a.length).forEach(item => {
+                        [...content.match(/#[^\s\<#\?\&]+/gi)].sort((a, b) => b.length - a.length).forEach(item => {
                             content = content.replaceAll(item, `<a class="hashtag" href="/post/list/${item.replace("#", '')}">${item}</a>`)
                         })
                     }
