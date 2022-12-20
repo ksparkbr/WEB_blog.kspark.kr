@@ -1,8 +1,11 @@
+import axios from 'axios';
+import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.bubble.css'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { reduxAction } from '../../redux/redux-action';
 
 const modules = {
     toolbar: {
@@ -43,6 +46,9 @@ const TitleInput = styled.input`
     font-size: 2rem;
     font-weight: bold;
     padding: 1rem;
+    color: black;
+    background-color: #eee;
+    border-radius: 1rem;
 `
 
 const OptionPanel = styled.div`
@@ -94,8 +100,9 @@ export default function PostEditor({ mode, post }) {
     const [titleContent, setTitleContent] = useState();  //제목
     const [writemode, setWritemode] = useState(false);   //비공개여부
     const [exposeMain, setExposeMain] = useState(true);  //메인공개여부
-
-
+    const dispatch = useDispatch();
+    const API_URL = process.env.NEXT_PUBLIC_BACKEND;
+    const router = useRouter();
     const chkWriteMode = useRef();
     const chkExposeMain = useRef();
     const titleInput = useRef();
@@ -113,11 +120,55 @@ export default function PostEditor({ mode, post }) {
         }
     },[])
 
-    useEffect(()=>{
-        console.log(titleContent);
-        console.log(htmlContent);
-
-    },[titleContent, htmlContent])
+    const submitHndlr = async ()=>{
+        // summary, thumbnail, hashtags를 여기에서 추출한다.
+        let tmpdom = document.createElement("div");
+        tmpdom.innerHTML = htmlContent;
+        let summary = tmpdom.innerText.trim().substring(0, 51);
+        let imageList = [...new Set(tmpdom.querySelectorAll('img'))].map(item => item.src)
+        let _htmlContent = htmlContent;
+        let thumbnail = '/image/avatar.png';
+        if(imageList.length > 0){
+            let imagePath = await axios.post(API_URL + "/file/image/upload", { images: imageList }).then(res => res.data)
+            if (imagePath.length > 0) {
+                imagePath.forEach((item, idx) => {
+                    if(item != null){
+                        if(idx == 0) thumbnail = API_URL + "/file/image/view/" + item;
+                        let imageUrl = API_URL + "/file/image/view/" + item;
+                        _htmlContent = _htmlContent.replace(imageList[idx], imageUrl)
+                    }
+                })
+            }
+        }
+        let hashTags = [...new Set(tmpdom.innerHTML.match(/#[^\s\<#\?]+/gi))]
+        let param = {
+            //title, content, summary, thumbnail, hashtags, showmain, writemode, session_id
+            title: titleContent == undefined ? "제목 없음" : titleContent,
+            content: htmlContent == undefined ? "" : _htmlContent,
+            summary: summary == undefined ? "" : summary,
+            thumbnail: thumbnail == undefined ? "" : thumbnail,
+            hashtags : hashTags.length == 0 ? ['#미분류'] : hashTags,
+            showmain : exposeMain ? "Y" : "N",
+            writemode : writemode ? "private" : "public",
+            session : session.session
+        }
+        // console.log(param);
+        if(session.admin){
+            if(mode == "new"){
+                let writeResult = await axios.post(API_URL + "/post/write", param, {withCredentials: true})
+                dispatch(reduxAction.ALERT({type : 'info', msg : '게시글이 등록되었습니다.', show: true}))
+                router.push("/post/view/" + writeResult.data.POST_ID + "?session=" + session.session);
+            }
+            if(mode == "edit"){
+                let writeResult = await axios.post(API_URL + "/post/edit/" + post.POST_ID, param, {withCredentials: true})
+                dispatch(reduxAction.ALERT({type : 'info', msg : '게시글이 수정되었습니다.', show: true}))
+                router.push("/post/view/" + writeResult.data.POST_ID + "?session=" + session.session);
+            }
+        }
+        else{
+            dispatch(reduxAction.ALERT({type: 'error', msg: '포스트 작성/수정 권한이 없습니다.', show: true}))
+        }
+    }
 
     return <>
         <Wrapper>
@@ -159,9 +210,12 @@ export default function PostEditor({ mode, post }) {
                 onChange={setHtmlContent}
                 modules={modules}
             />
-            <SubmitBtn>
+            <SubmitBtn onClick={()=>{
+                submitHndlr();
+            }}>
                 <img src="/image/edit.png" />
-                {<div>작성</div>}
+                {mode == 'new' && <div>작성</div>}
+                {mode == 'edit' && <div>작성</div>}
             </SubmitBtn>
         </Wrapper>
     </>

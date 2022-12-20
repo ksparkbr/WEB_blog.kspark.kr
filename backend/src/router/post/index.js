@@ -32,6 +32,68 @@ postRouter.post("/view/:id", async (request, response)=>{
     }
 })
 
+postRouter.post("/write", async (request, response)=>{
+    //title, content, summary, thumbnail, hashtags, showmain, writemode, session_id
+    let {title, content, summary, thumbnail, hashtags, showmain, writemode, session} = request.body;
+    if(await sessionCheck(session)){
+        //TITLE, CONTENT, SUMMARY, THUMBNAIL, HASH_TAGS, WRITE_MODE, SHOW_MAIN
+        console.log(hashtags);
+        let _hastag = await sqlMap.hashtag.selectHashtag({hashtags})
+        let hastag = _hastag.map(item => item.hashtag);
+
+        let filtered = hashtags.filter(item => !hastag.includes(item));
+        await sqlMap.hashtag.insertHashtag(filtered);
+
+        hashtags = JSON.stringify(hashtags);
+        let param ={title, content, summary, thumbnail, hashtags, showmain, writemode};
+
+        await sqlMap.post.insertPost(param);
+        let lastPostId = await sqlMap.post.selectPostLastest(param);
+        if(lastPostId.length > 0) lastPostId = lastPostId[0];
+        response.send(lastPostId);
+    }
+    else{
+        response.send("Access Denied");
+    }
+})
+
+postRouter.post("/edit/:id", async(request, response)=>{
+    let {id} = request.params;
+    let {title, content, summary, thumbnail, hashtags, showmain, writemode, session} = request.body;
+    if(await sessionCheck(session)){
+        let _hastag = await sqlMap.hashtag.selectHashtag({hashtags})
+        let hastag = _hastag.map(item => item.hashtag);
+        
+        let filtered = hashtags.filter(item => !hastag.includes(item));
+        await sqlMap.hashtag.insertHashtag(filtered);
+
+        hashtags = JSON.stringify(hashtags);
+        let param ={title, content, summary, thumbnail, hashtags, showmain, writemode, post_id: id};
+
+        await sqlMap.post.updatePost(param);
+        await sqlMap.hashtag.deleteHashtagRelativeZero({});
+        response.send({POST_ID : id});
+    }
+    else{
+        response.send("Access Denied");
+    }
+})
+
+postRouter.post("/delete/:id", async(request, response)=>{
+    let {id} = request.params;
+    let {session} = request.body;
+    let isadmin = await sessionCheck(session);
+    console.log(isadmin);
+    if(isadmin){
+        await sqlMap.post.deletePost({id});
+        await sqlMap.hashtag.deleteHashtagRelativeZero({});
+        response.send("Post is Deleted");
+    }
+    else{
+        response.send("Access Denied");
+    }
+
+})
 
 postRouter.get("/like/status/:id", async (request, response)=>{
     let {id} = request.params;
