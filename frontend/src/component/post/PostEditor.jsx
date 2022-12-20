@@ -102,6 +102,7 @@ export default function PostEditor({ mode, post }) {
     const [exposeMain, setExposeMain] = useState(true);  //메인공개여부
     const dispatch = useDispatch();
     const API_URL = process.env.NEXT_PUBLIC_BACKEND;
+    const FILE_SERVER_URL = process.env.NEXT_PUBLIC_FILESERVER;
     const router = useRouter();
     const chkWriteMode = useRef();
     const chkExposeMain = useRef();
@@ -129,12 +130,12 @@ export default function PostEditor({ mode, post }) {
         let _htmlContent = htmlContent;
         let thumbnail = '/image/avatar.png';
         if(imageList.length > 0){
-            let imagePath = await axios.post(API_URL + "/file/image/upload", { images: imageList }).then(res => res.data)
+            let imagePath = await axios.post(FILE_SERVER_URL + "/file/image/upload", { images: imageList }).then(res => res.data)
             if (imagePath.length > 0) {
                 imagePath.forEach((item, idx) => {
                     if(item != null){
-                        if(idx == 0) thumbnail = API_URL + "/file/image/view/" + item;
-                        let imageUrl = API_URL + "/file/image/view/" + item;
+                        if(idx == 0) thumbnail = FILE_SERVER_URL + "/file/image/view/" + item;
+                        let imageUrl = FILE_SERVER_URL + "/file/image/view/" + item;
                         _htmlContent = _htmlContent.replace(imageList[idx], imageUrl)
                     }
                 })

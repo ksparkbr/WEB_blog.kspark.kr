@@ -3,7 +3,7 @@ const fs =require('fs');
 const fileRouter = express.Router();
 
 fileRouter.post("/image/upload", async (request, response)=>{
-    const BASE_PATH = __dirname + "/../../../uploads"
+    const BASE_PATH = __dirname + "/../../../../../fileserver/uploads"
     const isExists = fs.existsSync( BASE_PATH );
     if( !isExists ) {
         fs.mkdirSync( BASE_PATH, { recursive: true } );
@@ -27,7 +27,7 @@ fileRouter.post("/image/upload", async (request, response)=>{
 
 fileRouter.get("/image/view/:filename", async (request, response)=>{
     let {filename} = request.params;
-    const BASE_PATH = __dirname + "/../../../uploads"
+    const BASE_PATH = __dirname + "/../../../../../fileserver/uploads"
     filename = filename.replace(/\//, '')
     let rtn = null;
     try{
