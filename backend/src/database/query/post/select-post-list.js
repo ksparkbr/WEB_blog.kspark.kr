@@ -12,7 +12,6 @@ const safeParam = require("../../safe-param");
 module.exports = async (param) => {
     try {
         param = safeParam(param);
-        console.log(param);
         let query = `
             select 
                 blogpost.POST_ID, TITLE, SUMMARY, THUMBNAIL, HASH_TAGS, WRITE_MODE, POST_DATE, IFNULL(a.LIKE_COUNT, 0) LIKE_COUNT
@@ -29,7 +28,6 @@ module.exports = async (param) => {
         if (param.SHOW_MAIN != null) query += `and SHOW_MAIN='${param.SHOW_MAIN}'`
         if (param.HASHTAG != null) query += ` and HASH_TAGS like '%"#${param.HASHTAG}"%'`
         query += `order by blogpost.POST_ID desc`
-        console.log(param);
         return await executeQuery(query);
     }
     catch (e) {

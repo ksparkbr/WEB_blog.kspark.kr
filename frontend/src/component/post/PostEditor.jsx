@@ -66,16 +66,23 @@ const CheckGroup = styled.div`
     align-items: center;
 `
 
-const SubmitBtn = styled.div`
+const ControlBtnGroup = styled.div`
     position: sticky;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     bottom: 1rem;
+    width: 100%;
+    gap: .5rem;
+`
+
+const SubmitBtn = styled.div`
     margin: 0;
-    left: 100%;
+    gap: .2rem;
+    transition: .3s;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: .2rem;
-    transition: .3s;
     & img{
         width: 1.1rem;
         height: 1.1rem;
@@ -90,6 +97,32 @@ const SubmitBtn = styled.div`
     border-radius: 2rem;
     box-shadow: 3px 3px 5px 0px rgba(0,0,0,30%);
     cursor: pointer;
+`
+
+const ArrowBtn = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: #dcdcdc99;
+    border-radius: 2.5rem;
+    box-shadow: 2px 2px 3px 0px rgba(0,0,0,.3);
+    transition:.3s;
+    margin-right: .5rem;
+    & img{
+        width: 1rem;
+    }
+    &:hover{
+        background-color: rgba(60,60,60,.3);
+        box-shadow: 2px 2px 3px 0px rgba(0,0,0,.5);
+    }
+    cursor: pointer;
+`
+
+const Flex = styled.div`
+    display: flex;
+    gap: .2rem;
 `
 
 const CheckBox = styled.input``
@@ -107,6 +140,13 @@ export default function PostEditor({ mode, post }) {
     const chkWriteMode = useRef();
     const chkExposeMain = useRef();
     const titleInput = useRef();
+
+    const arrowUpHndlr = () => {
+        window.scrollTo(0, 0);
+    }
+    const arrowDownHndlr = () => {
+        window.scrollTo(0, document.documentElement.offsetHeight);
+    }
 
     useEffect(()=>{
         if(mode === "new") chkExposeMain.current.checked = true;
@@ -150,7 +190,10 @@ export default function PostEditor({ mode, post }) {
 
         //썸네일 추출 - 작성한 글의 제일 첫번째 포함된 img 태그의 src를 참조한다.
         tmpdom.innerHTML = _htmlContent;
-        thumbnail = tmpdom.querySelector("img").src;
+        try{
+            thumbnail = tmpdom.querySelector("img").src;
+        }
+        catch(e){};
 
         let hashTags = [...new Set(tmpdom.innerHTML.match(/#[^\s\<#\?\&]+/gi))]
         let param = {
@@ -220,15 +263,41 @@ export default function PostEditor({ mode, post }) {
                 theme="bubble"
                 value={htmlContent}
                 onChange={setHtmlContent}
+                onKeyDown={(e)=>{
+                    if(e.ctrlKey && e.code == "Enter"){
+                        submitHndlr();
+                    }
+                    if(e.ctrlKey && e.code == "ArrowDown"){
+                        arrowDownHndlr();
+                    }
+                    if(e.ctrlKey && e.code == "ArrowUp"){
+                        arrowUpHndlr();
+                    }
+                    console.log(e);
+                }}
                 modules={modules}
+                style={{
+                    backgroundColor: "#f5f5f5",
+                    border: "1px dotted #cecece",
+                }}
             />
-            <SubmitBtn onClick={()=>{
-                submitHndlr();
-            }}>
-                <img src="/image/edit.png" />
-                {mode == 'new' && <div>작성</div>}
-                {mode == 'edit' && <div>작성</div>}
-            </SubmitBtn>
+            <ControlBtnGroup>
+                <SubmitBtn onClick={() => {
+                    submitHndlr();
+                }}>
+                    <img src="/image/edit.png" />
+                    {mode == 'new' && <div>작성</div>}
+                    {mode == 'edit' && <div>작성</div>}
+                </SubmitBtn>
+                <Flex>
+                    <ArrowBtn onClick={()=>{arrowDownHndlr()}}>
+                        <img src="/image/arrow-down.png" />
+                    </ArrowBtn>
+                    <ArrowBtn onClick={()=>{arrowUpHndlr()}}>
+                        <img src="/image/arrow-up.png" />
+                    </ArrowBtn>
+                </Flex>
+            </ControlBtnGroup>
         </Wrapper>
     </>
 }

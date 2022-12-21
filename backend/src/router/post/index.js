@@ -9,7 +9,6 @@ postRouter.post("/list", async (request, response)=>{
     if(await sessionCheck(session)){
         param.WRITE_MODE = null;
     }
-    console.log(param);
     response.send(await sqlMap.post.selectPostList(param));
 })
 
@@ -37,7 +36,6 @@ postRouter.post("/write", async (request, response)=>{
     let {title, content, summary, thumbnail, hashtags, showmain, writemode, session} = request.body;
     if(await sessionCheck(session)){
         //TITLE, CONTENT, SUMMARY, THUMBNAIL, HASH_TAGS, WRITE_MODE, SHOW_MAIN
-        console.log(hashtags);
         let _hastag = await sqlMap.hashtag.selectHashtag({hashtags})
         let hastag = _hastag.map(item => item.hashtag);
 
@@ -83,7 +81,6 @@ postRouter.post("/delete/:id", async(request, response)=>{
     let {id} = request.params;
     let {session} = request.body;
     let isadmin = await sessionCheck(session);
-    console.log(isadmin);
     if(isadmin){
         await sqlMap.post.deletePost({id});
         await sqlMap.hashtag.deleteHashtagRelativeZero({});

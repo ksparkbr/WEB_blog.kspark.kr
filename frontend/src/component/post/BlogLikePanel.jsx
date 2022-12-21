@@ -6,10 +6,7 @@ import { reduxAction } from "../../redux/redux-action";
 
 
 const Wrapper = styled.div`
-    position: sticky;
-    bottom: 10px;
-    text-align: -webkit-right;
-    text-align: right;
+    cursor: pointer;
 `
 const RoundPanel = styled.div`
 
@@ -19,6 +16,7 @@ const RoundPanel = styled.div`
     padding: .5rem;
     padding-left : 1rem;
     background-color: rgba(255,255,255,70%)
+    
 `
 
 const LikeImg = styled.img`
@@ -69,7 +67,10 @@ const BlogLikePanel = ({ postId }) => {
     }, [postId])
 
     return <>
-        <Wrapper>
+        <Wrapper onClick={() => {
+                            if (likeInfo[0].CHECKED == 0) likeHndlr();
+                            else likeCancelHndlr();
+                        }}>
             <RoundPanel>
                 <Flex>
                     <LikeImg
@@ -79,11 +80,6 @@ const BlogLikePanel = ({ postId }) => {
                                 likeInfo[0].CHECKED > 0 ?
                                 "/image/like-on.png" : "/image/like-off.png"
                         }
-                        onClick={() => {
-                            if (likeInfo[0].CHECKED == 0) likeHndlr();
-                            else likeCancelHndlr();
-                        }}
-
                     />
                     {
                         likeInfo != undefined && likeInfo.length > 0 && <LikeCount>

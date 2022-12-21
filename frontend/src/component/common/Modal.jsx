@@ -36,9 +36,7 @@ export default function Modal({ children, setState }) {
     }, [])
 
     return <>
-        <Head>
-            <title>로그인 | BLOG.KSPARK.KR</title>
-        </Head>
+        
         <Wrapper onClick={(e) => {
             e.stopPropagation();
             hideAction();

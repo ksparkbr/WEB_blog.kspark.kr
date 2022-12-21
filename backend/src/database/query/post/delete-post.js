@@ -15,7 +15,6 @@ const safeParam = require("../../safe-param");
         let query = `
             delete from blogpost where POST_ID=${param.id}
         `
-        console.log(query);
          return await executeQuery(query);
      }
      catch(e){

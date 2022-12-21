@@ -74,6 +74,8 @@ const HashTags = styled.div`
     color: #00bdff;
     font-size: .9rem;
     text-align: center;
+    background-color: white;
+    border-radius:  0px 0px 10px 10px;
 `
 
 const LockImg = styled.img`

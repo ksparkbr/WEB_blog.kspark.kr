@@ -1,4 +1,5 @@
 import axios from "axios"
+import Head from "next/head"
 import { useRouter } from "next/router"
 import { useEffect, useRef, useState } from "react"
 import { useDispatch } from "react-redux"
@@ -57,6 +58,9 @@ export default function SignInForm({setState}) {
         }
     }
     return <>
+        <Head>
+            <title>로그인 | BLOG.KSPARK.KR</title>
+        </Head>
         <Wrapper onClick={(e) => { e.stopPropagation() }}>
             <Title>
                 Sign-In

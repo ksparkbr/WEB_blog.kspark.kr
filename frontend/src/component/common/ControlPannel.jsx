@@ -25,7 +25,7 @@ const Wrapper = styled.div`
 
 const ControlDiv = styled.div`
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
     margin: 0 auto;
     max-width: 1200px;
     align-items: center;
@@ -34,11 +34,26 @@ const ControlDiv = styled.div`
     padding-right: 1rem;
 `
 
+const Flex = styled.div`
+    display: flex;
+    gap: 1rem;
+`
+
+const HomeBtn = styled.img`
+    width: 2.5rem;
+    cursor: pointer;
+    transition: .3s;
+    &:hover{
+        box-shadow: 0px 2px 0px 0px rgb(62 145 145 / 50%);
+    }
+`
+
 const Btn = styled.div`
     cursor: pointer;
     transition: .3s;
     &:hover{
         color: #000000;
+        box-shadow: 0px 2px 0px 0px rgb(62 145 145 / 50%);
     }
 `
 
@@ -59,21 +74,29 @@ export default function ControlPannel() {
 
     return <><Wrapper>
         <ControlDiv>
-            {!session.admin && 
-                <Btn onClick={()=>{
-                    setModal(true);
-                }}>Sign-In</Btn>
-            }
-            {session.admin && 
-                <Btn onClick={()=>{
-                    signOutHndlr();
-                }}>Sign-Out</Btn>
-            }
-            {session.admin && 
-                <Btn onClick={()=>{
-                    router.push("/post/editor/new")
-                }}>Write Post</Btn>
-            }
+            <Flex>
+                <HomeBtn src="/image/back.png" 
+                    onClick={()=>{
+                        router.back();
+                    }}/>
+            </Flex>
+            <Flex>
+                {!session.admin && 
+                    <Btn onClick={()=>{
+                        setModal(true);
+                    }}>Sign-In</Btn>
+                }
+                {session.admin && 
+                    <Btn onClick={()=>{
+                        signOutHndlr();
+                    }}>Sign-Out</Btn>
+                }
+                {session.admin && 
+                    <Btn onClick={()=>{
+                        router.push("/post/editor/new")
+                    }}>Write Post</Btn>
+                }
+            </Flex>
         </ControlDiv>
     </Wrapper>
     {modal && <Modal setState={setModal}><SignInForm setState={setModal} /></Modal>}

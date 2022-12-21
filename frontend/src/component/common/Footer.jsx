@@ -10,12 +10,32 @@ const FooterWrapper = styled.div`
     color: grey;
     font-weight: bold;
     border-top: 1px solid #bebebe;
+    @media screen and (min-width: 992px) and (max-width: 1199px){
+        min-width: 992px;
+    }
+    @media screen and (min-width: 768px) and (max-width: 991px){
+        min-width: 768px;
+    }
+    @media screen and (max-width: 767px){
+
+    }
 `
 
 const FooterContent = styled.div`
     min-width: 1200px;
     align-items: center;
     display: flex;
+    margin: 0 auto;
+    @media screen and (min-width: 992px) and (max-width: 1199px){
+        min-width: 992px;
+    }
+    @media screen and (min-width: 768px) and (max-width: 991px){
+        min-width: 768px;
+    }
+    @media screen and (max-width: 767px){
+        min-width: 100px;
+        max-width: 767px;margin: 0;
+    }
 `
 
 export default function Footer() {

@@ -23,7 +23,7 @@ export default function _PostWrite() {
     const getPost = async () => {
         let data = await axios.post(API_URL + "/post/view/" + id, { session: session.session }, { withCredentials: true })
             .then(res => res.data);
-        setPost(data);
+        if(data !== 'Access Denied') setPost(data);
     }
     useEffect(() => {
         if (id != "new") {

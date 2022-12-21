@@ -10,7 +10,6 @@ sessionRouter.post("/signin", async (request, response)=>{
     if(id == process.env.ADMIN_EMAIL){
         if(bcrypt.compareSync(password, process.env.ADMIN_PASSWORD)){
             request.session["admin"] = true;
-            console.log(request.session);
             response.send(request.session.id);
         }
         else{

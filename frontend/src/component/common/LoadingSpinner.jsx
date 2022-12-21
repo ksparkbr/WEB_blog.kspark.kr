@@ -81,10 +81,13 @@ const LdsSpinner = styled.div`
 `
 
 const Wrapper = styled.div`
+  position: absolute;
+  left: 0px;
+  top: 0px;
   width: 100%;
   display: flex;
   justify-content: center;
-  height: 40rem;
+  height: 100vh;
   text-align: -webkit-center;
   align-items: center;
 `

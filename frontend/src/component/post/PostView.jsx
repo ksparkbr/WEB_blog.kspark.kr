@@ -31,6 +31,15 @@ const Flex = styled.div`
     gap: 1rem;
     align-items: center;
 `
+
+const FlexBetween = styled.div`
+    display: flex;
+    justify-content: space-between;
+    position: sticky;
+    bottom: 10px;
+    text-align: -webkit-right;
+    text-align: right;
+`
 const PostDate = styled.div`
     font-size: 1rem;
     color: #a0a0a0;
@@ -138,10 +147,47 @@ const TitleWrapper = styled.div`
     background: linear-gradient(0deg, rgb(0 0 0 / 60%), rgb(0 0 0 / 60%)), url("${(props) => props.src || "/image/avatar.png"}");
     background-position: center;
     background-size: cover;
+    transition: .3s;
+    @media screen and (min-width: 992px) and (max-width: 1199px){
+        height: 170px;
+    }
+    @media screen and (min-width: 768px) and (max-width: 991px){
+        height: 150px;
+    }
+    @media screen and (max-width: 767px){
+        height: 120px;
+    }
+`
+
+const ArrowBtn = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: #dcdcdc99;
+    border-radius: 2.5rem;
+    box-shadow: 2px 2px 3px 0px rgba(0,0,0,.3);
+    transition:.3s;
+    margin-right: .5rem;
+    & img{
+        width: 1rem;
+    }
+    &:hover{
+        background-color: rgba(60,60,60,.3);
+        box-shadow: 2px 2px 3px 0px rgba(0,0,0,.5);
+    }
+    cursor: pointer;
 `
 
 export default function PostView({ post }) {
     const dateformat = Intl.DateTimeFormat('ko-KR', { dateStyle: 'medium', timeStyle: "short" })
+    const arrowUpHndlr = () => {
+        window.scrollTo(0, 0);
+    }
+    const arrowDownHndlr = () => {
+        window.scrollTo(0, document.documentElement.offsetHeight);
+    }
     return (<>
         <Head>
             <title>{post.TITLE} | BLOG.KSPARK.KR</title>
@@ -177,7 +223,17 @@ export default function PostView({ post }) {
             </Flex>
             <hr />
             <ContentArea dangerouslySetInnerHTML={{ __html: post.CONTENT }} />
-            <BlogLikePanel postId={post.POST_ID} />
+            <FlexBetween>
+                <BlogLikePanel postId={post.POST_ID} />
+                <Flex style={{gap: ".2rem"}}>
+                    <ArrowBtn onClick={()=>{arrowDownHndlr()}}>
+                        <img src="/image/arrow-down.png" />
+                    </ArrowBtn>
+                    <ArrowBtn onClick={()=>{arrowUpHndlr()}}>
+                        <img src="/image/arrow-up.png" />
+                    </ArrowBtn>
+                </Flex>
+            </FlexBetween>
         </Wrapper>
     </>)
 }

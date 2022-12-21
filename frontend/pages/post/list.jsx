@@ -17,6 +17,18 @@ const PostListGrid = styled.div`
     gap: 2rem;
     margin-top: 1rem;
     margin-bottom: 1rem;
+    @media screen and (min-width: 992px) and (max-width: 1199px){
+        grid-template-columns: repeat(3, 1fr);
+    }
+    @media screen and (min-width: 992px) and (max-width: 1199px){
+        grid-template-columns: repeat(3, 1fr);
+    }
+    @media screen and (min-width: 768px) and (max-width: 991px){
+        grid-template-columns: repeat(3, 1fr);
+    }
+    @media screen and (max-width: 767px){
+        grid-template-columns: repeat(1, 1fr);
+    }
 `
 
 export default function PostList() {
