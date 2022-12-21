@@ -76,6 +76,9 @@ const ContentArea = styled.div`
         margin-block-start : 1em;
         margin-block-end : 1em;
     }
+    & ol{
+        padding-left: 2em
+    }
     & p{
         font-size: 1rem;
     }
