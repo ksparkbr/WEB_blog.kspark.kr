@@ -128,6 +128,9 @@ const ContentArea = styled.div`
         text-align: -webkit-right;
         text-align: right;
     }
+    & img{
+        max-width: 100%;
+    }
 `
 
 const LockImg = styled.img`
