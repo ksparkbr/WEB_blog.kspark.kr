@@ -103,7 +103,8 @@ export default function PostList({ tag }) {
                     : postList.length <= 1 &&
                     <LoadingSpinner
                         onLoad={
-                            router.push("/post/view/" + postList[0].POST_ID + (session.admin && "?session=" + session.session))
+                            session.admin ? router.push("/post/view/" + postList[0].POST_ID + "?session=" + session.session)
+                                          : router.push("/post/view/" + postList[0].POST_ID)
                         }
                     />
                     }
