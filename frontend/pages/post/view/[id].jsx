@@ -14,7 +14,7 @@ export async function getServerSideProps(context) {
                 if (content != null) {
                     try {
                         [...content.match(/#[^\s\<#\?\&]+/gi)].sort((a, b) => b.length - a.length).forEach(item => {
-                            content = content.replaceAll(item, `<a class="hashtag" href="/post/list/${item.replace("#", '')}">${item}</a>`)
+                            content = content.replaceAll(item, `<a class="hashtag" href="#">${item}</a>`)
                         })
                     }
                     catch (e) { }

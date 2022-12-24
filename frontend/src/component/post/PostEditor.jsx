@@ -287,7 +287,7 @@ export default function PostEditor({ mode, post }) {
                 }}>
                     <img src="/image/edit.png" />
                     {mode == 'new' && <div>작성</div>}
-                    {mode == 'edit' && <div>작성</div>}
+                    {mode == 'edit' && <div>수정</div>}
                 </SubmitBtn>
                 <Flex>
                     <ArrowBtn onClick={()=>{arrowDownHndlr()}}>

@@ -1,5 +1,5 @@
 const express = require('express');
-const sqlMap = require('../../db/sql-map');
+const sqlMap = require('../../database/sql-map');
 const sessionCheck = require('../session/session-check');
 const hashtagRouter = express.Router();
 
@@ -14,7 +14,7 @@ hashtagRouter.get("/menu", async (request, response)=>{
     response.send(menuList);
 })
 
-hashtagRouter.post("/update/:expose/", async (request, response)=>{
+hashtagRouter.post("/update/:expose", async (request, response)=>{
     let {expose} = request.params;
     let {idx,session} = request.body;
     let isAdmin = await sessionCheck(session)

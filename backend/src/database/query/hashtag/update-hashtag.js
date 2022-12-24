@@ -13,12 +13,10 @@ const safeParam = require("../../safe-param");
      try{
         param = safeParam(param)
         let query = `
-            update hashtags set expose_main = '${param.expose_main}'
-            where idx = ?
+            update hashtags set expose_main = '${param.expose}'
+            where idx = ${param.idx}
         `
-
-        let { queryStr, paramArr } = queryBuilder(query, param);
-        return await executeQuery(queryStr, paramArr);
+        return await executeQuery(query);
      }
      catch(e){
         console.log(e);

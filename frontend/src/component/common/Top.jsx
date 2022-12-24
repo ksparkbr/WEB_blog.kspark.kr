@@ -74,6 +74,22 @@ const SearchImage = styled.img`
     cursor: pointer;
 `
 
+const MenuWrapper = styled.div`
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+`
+
+const MenuItem = styled.div`
+    font-weight: bold;
+    color: #9eeaf5;
+    transition: .3s;
+    &:hover{
+        color: white;
+    }
+    cursor: pointer;
+`
+
 export default function Top() {
     const alert = useSelector(s => s.alert);
     const API_URL = process.env.NEXT_PUBLIC_BACKEND;
@@ -81,6 +97,13 @@ export default function Top() {
     const [searchModal, setSearchModal] = useState(false);
 
     const session = useSelector(s => s.session);
+    const menuList = useSelector(s => s.hashtag_menu)
+
+    const getMenuList = async () => {
+        let menu = await axios.get(`${API_URL}/tag/menu`).then(res => res.data);
+        menu = menu.sort((a, b) => a.idx - b.idx)
+        dispatch(reduxAction.HASHTAG_MENU(menu));
+    }
 
     const checkSession = async () => {
         let session = window.sessionStorage.getItem("session");
@@ -97,6 +120,7 @@ export default function Top() {
 
     useEffect(()=>{
         checkSession();
+        getMenuList();
     },[])
 
     const router = useRouter();
@@ -111,10 +135,22 @@ export default function Top() {
                     <span>BLOG.KSPARK.KR</span>
                 </TopLogo>
                 <Flex>
+                    <MenuWrapper>
+                        {
+                            menuList.length > 0 && menuList.map((item, idx)=>{
+                                return (
+                                    <MenuItem key={idx}
+                                        onClick={()=>{
+                                            router.push("/post/list/" + item.hashtag.replace("#", ''))
+                                        }}
+                                    >{item.hashtag}</MenuItem>
+                                )
+                            })
+                        }
+                    </MenuWrapper>
                     <SearchImage src="/image/search.png" 
                         onClick={()=>{setSearchModal(true)}}
                     />
-
                 </Flex>
             </TopContent>
         </TopWrapper>

@@ -59,46 +59,50 @@ const Btn = styled.div`
 
 export default function ControlPannel() {
     const [modal, setModal] = useState(false);
-    const session = useSelector(s=>s.session);
+    const session = useSelector(s => s.session);
     const API_URL = process.env.NEXT_PUBLIC_BACKEND;
     const dispatch = useDispatch();
     const router = useRouter();
 
     const signOutHndlr = async () => {
-        let signoutstate = await axios.post(API_URL + "/session/signout", {session : session.session}).then(res => res.data);
+        let signoutstate = await axios.post(API_URL + "/session/signout", { session: session.session }).then(res => res.data);
         window.sessionStorage.removeItem("session");
-        dispatch(reduxAction.SESSION({admin: false, session: null}));
-        dispatch(reduxAction.ALERT({type: "error", show: true, msg:"로그아웃 되었습니다."}));
+        dispatch(reduxAction.SESSION({ admin: false, session: null }));
+        dispatch(reduxAction.ALERT({ type: "error", show: true, msg: "로그아웃 되었습니다." }));
         router.push("/post/list")
     }
 
     return <><Wrapper>
         <ControlDiv>
             <Flex>
-                <HomeBtn src="/image/back.png" 
-                    onClick={()=>{
+                <HomeBtn src="/image/back.png"
+                    onClick={() => {
                         router.back();
-                    }}/>
+                    }} />
             </Flex>
             <Flex>
-                {!session.admin && 
-                    <Btn onClick={()=>{
+                {!session.admin &&
+                    <Btn onClick={() => {
                         setModal(true);
                     }}>Sign-In</Btn>
                 }
-                {session.admin && 
-                    <Btn onClick={()=>{
+                {session.admin && (<>
+                    <Btn onClick={() => {
                         signOutHndlr();
                     }}>Sign-Out</Btn>
-                }
-                {session.admin && 
-                    <Btn onClick={()=>{
+                    <Btn onClick={() => {
                         router.push("/post/editor/new")
                     }}>Write Post</Btn>
+                    <Btn onClick={()=>{
+                        router.push("/config/hashtag");
+                    }} >
+                        Config
+                    </Btn>
+                </>)
                 }
             </Flex>
         </ControlDiv>
     </Wrapper>
-    {modal && <Modal setState={setModal}><SignInForm setState={setModal} /></Modal>}
+        {modal && <Modal setState={setModal}><SignInForm setState={setModal} /></Modal>}
     </>
 }

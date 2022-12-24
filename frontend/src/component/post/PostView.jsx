@@ -1,4 +1,5 @@
 import Head from "next/head"
+import { useRouter } from "next/router"
 import styled from "styled-components"
 import BlogLikePanel from "./BlogLikePanel"
 import EditPanel from "./EditPanel"
@@ -194,6 +195,7 @@ export default function PostView({ post }) {
     const arrowDownHndlr = () => {
         window.scrollTo(0, document.documentElement.offsetHeight);
     }
+    const router = useRouter();
     return (<>
         <Head>
             <title>{post.TITLE} | BLOG.KSPARK.KR</title>
@@ -221,7 +223,12 @@ export default function PostView({ post }) {
                 </Tag>
                 <Flex>
                     {JSON.parse(post.HASH_TAGS).length > 0 && JSON.parse(post.HASH_TAGS).map((item, idx) => {
-                        return (<HashTag key={idx}>
+                        return (
+                        <HashTag key={idx}
+                            onClick={()=>{
+                                router.push("/post/list/" + item.replace("#", ""))
+                            }}
+                        >
                             {item}
                         </HashTag>)
                     })}
