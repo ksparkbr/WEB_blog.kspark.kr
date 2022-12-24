@@ -13,7 +13,7 @@ export default function _PostList() {
     const {tag} = router.query;
     return <>
         <Head>
-            <title>홈 | BLOG.KSPARK.KR</title>
+            <title>#{tag} | BLOG.KSPARK.KR</title>
         </Head>
         <PostList tag = {tag}/>
     </>

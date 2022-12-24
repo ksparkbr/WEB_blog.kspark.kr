@@ -5,6 +5,7 @@ import axios from "axios"
 import SearchHashtagDialog from "./SearchForm/SearchHashtagDialog"
 import SearchPostDialog from "./SearchForm/SearchPostDialog"
 import { useSelector } from "react-redux"
+import Head from "next/head"
 
 const Wrapper = styled.div`
     position: fixed;
@@ -76,6 +77,9 @@ export default function SearchForm({ setState }) {
     const [event, setEvent] = useState(null);
 
     return <>
+        <Head>
+            <title>검색하기 | BLOG.KSPARK.KR</title>
+        </Head>
         <Wrapper onClick={(e) => { e.stopPropagation() }}>
             <SearchImage src="/image/search.png" />
             <SearchInput placeholder="태그, 포스트 내용 검색"
