@@ -7,15 +7,17 @@
  */
 
  const executeQuery = require("../../execute-query");
+const safeParam = require("../../safe-param");
  
  module.exports = async (param) => {
      try{
         param = safeParam(param);
-        if(param?.hashtags.length > 0){
+        let hashtags = Object.values(param)
+        if(hashtags.length > 0){
             let query = `
                 insert into hashtags(hashtag, expose_main) values
             `
-            query += param?.hashtags.map(item => `('${item}', 'N')`).join(',');
+            query += hashtags.map(item => `('${item}', 'N')`).join(',');
 
             return await executeQuery(query);
         }

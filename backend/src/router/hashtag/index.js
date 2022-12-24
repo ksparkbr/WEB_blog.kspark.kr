@@ -27,9 +27,11 @@ hashtagRouter.post("/update/:expose", async (request, response)=>{
     }
 })
 
-hashtagRouter.get("/search", async (request, response)=>{
-    let {keyword} = request.query;
-    response.send(await sqlMap.hashtag.selectHashtag({keyword}));
+hashtagRouter.post("/search", async (request, response)=>{
+    let {keyword, session} = request.body;
+    let param = {keyword};
+    if(!await sessionCheck(session)) param = {...param, WRITE_MODE: 'public'}
+    response.send(await sqlMap.hashtag.selectHashtagRelativepost(param));
 })
 
 module.exports = hashtagRouter;

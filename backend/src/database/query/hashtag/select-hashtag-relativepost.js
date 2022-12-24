@@ -21,10 +21,14 @@ module.exports = async (param) => {
             count(blogpost.HASH_TAGS) as relative_post 
         from blogpost 
         right join hashtags 
-        on blogpost.HASH_TAGS like concat('%', hashtags.hashtag, '%')   
-        group by hashtags.idx, hashtags.hashtag, hashtags.expose_main, hashtags.create_date
+        on blogpost.HASH_TAGS like concat('%', hashtags.hashtag, '%')
+        where 1=1`
+        if(!!param.keyword) query += ` and hashtags.hashtag like '%${param.keyword}%'`
+        if(!!param.WRITE_MODE) query += ` and blogpost.WRITE_MODE = '${param.WRITE_MODE}'`
+        query += `group by hashtags.idx, hashtags.hashtag, hashtags.expose_main, hashtags.create_date
         order by idx desc
         `
+        if(!!param.keyword) query += ` limit 20`
         return await executeQuery(query);
     }
     catch(e){

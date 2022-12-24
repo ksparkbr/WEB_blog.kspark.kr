@@ -38,7 +38,6 @@ postRouter.post("/write", async (request, response)=>{
         //TITLE, CONTENT, SUMMARY, THUMBNAIL, HASH_TAGS, WRITE_MODE, SHOW_MAIN
         let _hastag = await sqlMap.hashtag.selectHashtag({hashtags})
         let hastag = _hastag.map(item => item.hashtag);
-
         let filtered = hashtags.filter(item => !hastag.includes(item));
         await sqlMap.hashtag.insertHashtag(filtered);
 
@@ -61,7 +60,6 @@ postRouter.post("/edit/:id", async(request, response)=>{
     if(await sessionCheck(session)){
         let _hastag = await sqlMap.hashtag.selectHashtag({hashtags})
         let hastag = _hastag.map(item => item.hashtag);
-        
         let filtered = hashtags.filter(item => !hastag.includes(item));
         await sqlMap.hashtag.insertHashtag(filtered);
 
@@ -112,6 +110,13 @@ postRouter.get("/like/:id", async (request, response)=>{
         await sqlMap.post.insertPostLike({POST_ID: id, IP : request.ip});
     }
     response.send("Done");
+})
+
+postRouter.post("/search", async (request, response)=>{
+    let {keyword, session} = request.body;
+    let param = {keyword};
+    if(!await sessionCheck(session)) param = {...param, WRITE_MODE : 'public'}
+    response.send(await sqlMap.post.selectPostList(param));
 })
 
 module.exports = postRouter;

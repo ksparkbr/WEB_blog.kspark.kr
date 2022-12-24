@@ -165,7 +165,7 @@ export default function PostEditor({ mode, post }) {
         // summary, thumbnail, hashtags를 여기에서 추출한다.
         let tmpdom = document.createElement("div");
         tmpdom.innerHTML = htmlContent;
-        let summary = tmpdom.innerText.trim().substring(0, 51);
+        let summary = tmpdom.innerText.trim().substring(0, 200);
 
         // 작성한 글 내의 모든 img 태그를 추출하여 imageList라는 배열로 만든다.
         let imageList = [...new Set(tmpdom.querySelectorAll('img'))].map(item => item.src)
@@ -195,6 +195,7 @@ export default function PostEditor({ mode, post }) {
         }
         catch(e){};
 
+        //해시태그 추출
         let hashTags = [...new Set(tmpdom.innerHTML.match(/#[^\s\<#\?\&]+/gi))]
         let param = {
             //title, content, summary, thumbnail, hashtags, showmain, writemode, session_id

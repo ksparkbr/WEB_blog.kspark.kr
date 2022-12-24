@@ -24,9 +24,10 @@ module.exports = async (param) => {
             where 1=1 
         `
 
-        if (param.WRITE_MODE != null) query += ` and WRITE_MODE='${param.WRITE_MODE}'`
-        if (param.SHOW_MAIN != null) query += `and SHOW_MAIN='${param.SHOW_MAIN}'`
-        if (param.HASHTAG != null) query += ` and HASH_TAGS like '%"#${param.HASHTAG}"%'`
+        if (!!param.WRITE_MODE) query += ` and WRITE_MODE='${param.WRITE_MODE}'`
+        if (!!param.SHOW_MAIN) query += `and SHOW_MAIN='${param.SHOW_MAIN}'`
+        if (!!param.HASHTAG) query += ` and HASH_TAGS like '%"#${param.HASHTAG}"%'`
+        if (!!param.keyword) query += ` and (SUMMARY like '%${param.keyword}%' or (TITLE like '%${param.keyword}%'))`
         query += `order by blogpost.POST_ID desc`
         return await executeQuery(query);
     }

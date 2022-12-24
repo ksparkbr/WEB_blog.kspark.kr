@@ -17,10 +17,10 @@ const safeParam = require("../../safe-param");
             _hashtagStringify = _hashtagStringify.replace(/--/gi, '');
             query += ` and hashtag in (${_hashtagStringify})`
          }
-         if(param.keyword != null) query += ` and hashtag like '%${param.keyword}%'`
+         if(!!param.keyword) query += ` and hashtag like '%${param.keyword}%'`
          if(param.expose_main == 'Y') query += ` and expose_main = 'Y'`
          query += ` order by idx desc`
-         if(param.keyword != null) query += ` limit 10`
+         if(!!param.keyword) query += ` limit 20`
          
          return await executeQuery(query);
      }

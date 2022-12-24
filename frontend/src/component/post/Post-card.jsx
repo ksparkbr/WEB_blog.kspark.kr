@@ -109,7 +109,7 @@ export default function PostCard({ item }) {
                             {item.TITLE}
                         </PostTitle>
                         <PostSummary>
-                            {item.SUMMARY.length >= 50 ? item.SUMMARY + "..." : item.SUMMARY}
+                            {item.SUMMARY.length >= 50 ? item.SUMMARY.substring(0,50) + "..." : item.SUMMARY}
                         </PostSummary>
                         <HashTags>
                             {JSON.parse(item.HASH_TAGS).join(" ")}
