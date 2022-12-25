@@ -72,12 +72,18 @@ const Flex = styled.div`
 const SearchImage = styled.img`
     width: 2rem;
     cursor: pointer;
+    @media screen and (max-width: 767px){
+        margin-right: 1rem;
+    }
 `
 
 const MenuWrapper = styled.div`
     display: flex;
     gap: 1rem;
     align-items: center;
+    @media screen and (max-width: 767px){
+        display: none;
+    }
 `
 
 const MenuItem = styled.div`

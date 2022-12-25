@@ -11,6 +11,10 @@ const Wrapper = styled.div`
     box-shadow: 2px 5px 3px 0px rgb(0 0 0 / 30%);
     border-radius: 0px 0px 1rem 1rem;
     padding-bottom: 1rem;
+    @media screen and (max-width: 767px){
+        width : 300px;
+        left: calc(50% - 130px);
+    }
 `
 const Item = styled.div`
     padding: .5rem 1.5rem .5rem 1.5rem;

@@ -274,7 +274,6 @@ export default function PostEditor({ mode, post }) {
                     if(e.ctrlKey && e.code == "ArrowUp"){
                         arrowUpHndlr();
                     }
-                    console.log(e);
                 }}
                 modules={modules}
                 style={{

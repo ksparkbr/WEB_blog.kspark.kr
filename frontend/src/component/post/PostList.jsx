@@ -85,7 +85,7 @@ export default function PostList({ tag }) {
                                 <>
                                     <TagInfo>
                                         <TagName>#{tag}</TagName>
-                                        <span>검색결과</span>
+                                        {/* <span>검색결과</span> */}
                                         <TagCount>{postList.length}</TagCount>
                                         <span>건</span>
                                     </TagInfo>

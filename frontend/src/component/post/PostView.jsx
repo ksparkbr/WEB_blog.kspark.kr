@@ -25,6 +25,12 @@ const Title = styled.div`
     display: flex;
     align-items: center;
     gap: 1rem;
+    @media screen and (min-width: 768px) and (max-width: 991px){
+        font-size: 1.8rem;
+    }
+    @media screen and (max-width: 767px){
+        font-size: 1.5rem;
+    }
 `
 
 const Flex = styled.div`
@@ -205,7 +211,11 @@ export default function PostView({ post }) {
                 {
                     post.WRITE_MODE == "private" && <LockImg src="/image/lock.png" />
                 }
-                <div>
+                <div style={{
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                }}>
                     {post.TITLE}
                 </div>
             </Title>

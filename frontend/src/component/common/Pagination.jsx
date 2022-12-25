@@ -29,7 +29,6 @@ export default function Pagination({ dataList, showItems, setDataList }) {
 
     const makePagination = () => {
         let pagination = [];
-        console.log(dataList);
         let paginationSize = Math.ceil(dataList.length / showItems);
         for (let i = 1; i <= paginationSize; i++) {
             pagination.push(i);

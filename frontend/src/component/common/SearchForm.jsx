@@ -31,6 +31,9 @@ const SearchInput = styled.input`
         outline: #c3e3ff auto 1px;
     }
     margin-right: 1rem;
+    @media screen and (max-width: 767px){
+        width : 300px;
+    }
 `
 
 const SearchImage = styled.img`

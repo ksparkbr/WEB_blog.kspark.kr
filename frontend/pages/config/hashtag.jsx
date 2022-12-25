@@ -38,8 +38,34 @@ const Wrapper = styled.div`
         border-bottom: 1px solid black;
         padding-top: .5rem;
         padding-bottom: .5rem;
+        
     }
 `
+
+const GridWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+`
+
+const GridRow = styled.div`
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    transition: .3s;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    &:hover{
+        background-color: #e8e8e8;
+    }
+    & div{
+        text-align: center;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    border-bottom: 1px solid grey;
+}
+`
+
 const Flex = styled.div`
     width: 100%;
     display: flex;
@@ -154,45 +180,45 @@ export default function HashtagConfig() {
                 </SearchInput>
             </SearchWrapper>
         </Flex>
-        <table>
-            <thead>
-                <tr>
-                    <th>구분</th>
-                    <th>해시태그</th>
-                    <th>메인공개여부</th>
-                    <th>생성일자</th>
-                    <th>관련포스트수</th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    shownTagList.length > 0 && shownTagList.map((item, idx) => {
-                        return <tr key={idx}>
-                            <td>{item.idx}</td>
-                            <td>
-                                <HashTag onClick={()=>{
-                                    router.push("/post/list/" + item.hashtag.replace("#", ""))
-                                }}>
-                                    {item.hashtag}
-                                </HashTag>
-                            </td>
-                            <td>
-                                <ExposeChk 
-                                    type="checkbox" 
-                                    defaultChecked={ item.expose_main == "Y" ? true : false } 
-                                    data-tag={item.idx}
-                                    onClick={(e)=>{
-                                        exposeChangeHndlr(e);
-                                    }}
-                                />
-                            </td>
-                            <td>{dateformat.format(new Date(item.create_date))}</td>
-                            <td>{item.relative_post}</td>
-                        </tr>
-                    })
-                }
-            </tbody>
-        </table>
+
+        <GridWrapper>
+            <GridRow style={{
+                fontWeight: "bold",
+                backgroundColor: "#c5edec",
+            }}>
+                <div>구분</div>
+                <div>태그</div>
+                <div>메인공개</div>
+                <div>생성일자</div>
+                <div>관련포스트</div>
+            </GridRow>
+            {
+                shownTagList.length > 0 && shownTagList.map((item, idx) => {
+                    return (<GridRow>
+                        <div>{item.idx}</div>
+                        <div>
+                            <HashTag onClick={() => {
+                                router.push("/post/list/" + item.hashtag.replace("#", ""))
+                            }}>
+                                {item.hashtag}
+                            </HashTag>
+                        </div>
+                        <div>
+                            <ExposeChk
+                                type="checkbox"
+                                defaultChecked={item.expose_main == "Y" ? true : false}
+                                data-tag={item.idx}
+                                onClick={(e) => {
+                                    exposeChangeHndlr(e);
+                                }}
+                            />
+                        </div>
+                        <div>{dateformat.format(new Date(item.create_date))}</div>
+                        <div>{item.relative_post}</div>
+                    </GridRow>)
+                })  
+            }
+        </GridWrapper>
         {
             searchResult.length > 0 && <Pagination dataList={searchResult} showItems={15} setDataList={setShownTagList} />
         }
