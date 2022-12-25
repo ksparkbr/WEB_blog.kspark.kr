@@ -1,6 +1,9 @@
 import Head from "next/head"
 import { useRouter } from "next/router"
+import { useState } from "react"
 import styled from "styled-components"
+import CommentEditor from "../comment/CommentEditor"
+import CommentView from "../comment/CommentView"
 import BlogLikePanel from "./BlogLikePanel"
 import EditPanel from "./EditPanel"
 
@@ -193,6 +196,28 @@ const ArrowBtn = styled.div`
     cursor: pointer;
 `
 
+const CommentOpen = styled.div`
+    display: flex;
+    cursor: pointer;
+    border: 1px solid grey;
+    border-radius: 40px;
+    //padding: .5rem;
+    //padding-left : 1rem;
+    background-color: rgba(255,255,255,70%);
+    transition: .3s;
+    & div{
+        padding: .5rem;
+        font-weight: bold;
+    }
+    & div img{
+        width: .7rem;
+        margin: .5rem;
+    }
+    &:hover{
+        background-color: #e2e2e2;
+    }
+`
+
 export default function PostView({ post }) {
     const dateformat = Intl.DateTimeFormat('ko-KR', { dateStyle: 'medium', timeStyle: "short" })
     const arrowUpHndlr = () => {
@@ -202,6 +227,17 @@ export default function PostView({ post }) {
         window.scrollTo(0, document.documentElement.offsetHeight);
     }
     const router = useRouter();
+
+    const [commentToggle, setCommentToggle] = useState(false);
+    const [commentView, setCommentView] = useState(true);
+
+    const commentToggleHndlr = ()=>{
+        if(commentToggle) setCommentToggle(false);
+        else setCommentToggle(true);
+    }
+
+    
+
     return (<>
         <Head>
             <title>{post.TITLE} | BLOG.KSPARK.KR</title>
@@ -247,7 +283,18 @@ export default function PostView({ post }) {
             <hr />
             <ContentArea dangerouslySetInnerHTML={{ __html: post.CONTENT }} />
             <FlexBetween>
-                <BlogLikePanel postId={post.POST_ID} />
+                <Flex>
+                    <BlogLikePanel postId={post.POST_ID} />
+                    <CommentOpen onClick={()=>{commentToggleHndlr()}}>
+                        <div>
+                            댓글
+                        </div>
+                        <div style={{padding: 0, paddingTop: ".5rem", borderLeft:"1px solid #e2e2e2"}}>
+                            {!commentToggle && <img src="/image/arrow-down.png" />}
+                            {commentToggle && <img src="/image/arrow-up.png" />}
+                        </div>
+                    </CommentOpen>
+                </Flex>
                 <Flex style={{gap: ".2rem"}}>
                     <ArrowBtn onClick={()=>{arrowDownHndlr()}}>
                         <img src="/image/arrow-down.png" />
@@ -257,6 +304,13 @@ export default function PostView({ post }) {
                     </ArrowBtn>
                 </Flex>
             </FlexBetween>
+            { commentToggle && 
+                <CommentEditor post={post} 
+                               commentView={commentView} 
+                               setCommentView={setCommentView} 
+                               setCommentToggle={setCommentToggle} 
+                />}
+            <CommentView post={post} toggle={commentView} />
         </Wrapper>
     </>)
 }

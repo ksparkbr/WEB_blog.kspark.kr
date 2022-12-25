@@ -1,3 +1,5 @@
+const insertComment = require("./query/comment/insert-comment");
+const selectComment = require("./query/comment/select-comment");
 const deleteHashtagRelativeZero = require("./query/hashtag/delete-hashtag-relative-zero");
 const insertHashtag = require("./query/hashtag/insert-hashtag");
 const selectHashtag = require("./query/hashtag/select-hashtag");
@@ -38,5 +40,9 @@ module.exports = {
         selectHashtag : param => selectHashtag(param),
         updateHashtag : param => updateHashtag(param),
     },
+    comment:{
+        insertComment : param => insertComment(param),
+        selectComment : param => selectComment(param),
+    }
 
 }
