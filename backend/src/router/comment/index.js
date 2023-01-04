@@ -17,7 +17,13 @@ commentRouter.post("/write", async (request, response)=>{
 commentRouter.get("/load/:id", async (request, response)=>{
     let {id} = request.params;
     let rtn = await sqlMap.comment.selectComment({post_id: id});
-    response.send(rtn);
+    let comment = rtn.filter(item => item.is_reply === 'N');
+    let reply = rtn.filter(item => item.is_reply === 'Y');
+    comment.forEach((item, idx)=>{
+        let tmp = reply.filter(_it => _it.reply_comment_idx === item.idx)
+        comment[idx].reply = !!tmp ? tmp : [];
+    })
+    response.send(comment);
 })
 
 module.exports = commentRouter;

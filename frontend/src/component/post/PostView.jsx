@@ -310,7 +310,7 @@ export default function PostView({ post }) {
                                setCommentView={setCommentView} 
                                setCommentToggle={setCommentToggle} 
                 />}
-            <CommentView post={post} toggle={commentView} />
+            <CommentView post={post} toggle={commentView} setToggle={setCommentView} />
         </Wrapper>
     </>)
 }

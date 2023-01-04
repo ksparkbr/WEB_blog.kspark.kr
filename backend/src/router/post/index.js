@@ -81,6 +81,7 @@ postRouter.post("/delete/:id", async(request, response)=>{
     let isadmin = await sessionCheck(session);
     if(isadmin){
         await sqlMap.post.deletePost({id});
+        await sqlMap.comment.deleteComment({post_id : id});
         await sqlMap.hashtag.deleteHashtagRelativeZero({});
         response.send("Post is Deleted");
     }

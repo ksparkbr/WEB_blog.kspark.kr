@@ -1,3 +1,4 @@
+const deleteComment = require("./query/comment/delete-comment");
 const insertComment = require("./query/comment/insert-comment");
 const selectComment = require("./query/comment/select-comment");
 const deleteHashtagRelativeZero = require("./query/hashtag/delete-hashtag-relative-zero");
@@ -43,6 +44,7 @@ module.exports = {
     comment:{
         insertComment : param => insertComment(param),
         selectComment : param => selectComment(param),
+        deleteComment : param => deleteComment(param),
     }
 
 }

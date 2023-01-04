@@ -5,7 +5,7 @@ import styled from "styled-components"
 import { reduxAction } from "../../redux/redux-action"
 
 const Wrapper = styled.div`
-    display: relative;
+    position: relative;
     margin: 1rem;
     border: 1px solid grey;
     //padding: 1rem;
@@ -100,7 +100,7 @@ export default function CommentEditor({post, commentView, setCommentView, setCom
                     post_id: post.POST_ID,
                     is_reply: 'N',
                     reply_comment_idx : -1,
-                    author: author,
+                    author: !!!author ? "손님" : author,
                     content: content,
                     password: password,
                 };
@@ -114,6 +114,7 @@ export default function CommentEditor({post, commentView, setCommentView, setCom
     useEffect(()=>{
         authorEditRef.current.focus();
     },[])
+
     return <Wrapper>
         <Row>
             <Flex>
