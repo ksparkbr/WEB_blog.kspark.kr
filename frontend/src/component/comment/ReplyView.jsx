@@ -32,6 +32,7 @@ const AuthorIP = styled.div`
 
 const CommentContent = styled.div`
     font-size: .9rem;
+    overflow-wrap: break-word;
 `
 const CommentImg = styled.img`
     width: 1rem;

@@ -23,7 +23,8 @@ color: grey;
 `
 
 const CommentContent = styled.div`
-font-size: .9rem;
+    font-size: .9rem;
+    overflow-wrap: break-word;
 `
 const CommentImg = styled.img`
 width: 1rem;
