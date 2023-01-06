@@ -21,7 +21,8 @@ const globalConfig = {
         // keepAliveInitialDelay에서 설정한 시간마다 체크하여 만료된 세션을 삭제한다.
     },
     corsOptions: {
-        origin: ['http://blog.kspark.kr', 'http://blog.kspark.kr:3000', 'http://localhost:3000', 'http://146.56.100.135', 'http://146.56.100.135:3000'],
+        //origin: ['http://blog.kspark.kr', 'http://blog.kspark.kr:3000', 'http://localhost:3000', 'http://146.56.100.135', 'http://146.56.100.135:3000'],
+        origin: ['*'],
         credentials: true,            //access-control-allow-credentials:true
         optionSuccessStatus: 200,
     }
